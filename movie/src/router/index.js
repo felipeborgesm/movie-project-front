@@ -1,23 +1,25 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import HomeWorld from "../components/HelloWorld.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    name: "home",
-    component: HomeView,
+    redirect: (to) => {
+      return { name: "home", query: to.query };
+    },
   },
   {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+    path: "/Bem_vindo",
+    name: "home",
+    component: HomeWorld,
+  },
+  {
+    path: "/Tela_Principal",
+    name: "principal",
+    component: () => import("../views/TelaPrincipal.vue"),
   },
 ];
 
