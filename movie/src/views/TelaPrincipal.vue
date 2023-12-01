@@ -2,14 +2,16 @@
   <div>
     <v-data-table :items="usersData" :headers="header"></v-data-table>
 
-    <v-col cols="12" md="4">
-      <v-text-field v-model="userRequest.nome" label="nome"></v-text-field>
-      <v-text-field v-model="userRequest.cpf" label="cpf"></v-text-field>
-      <v-text-field v-model="userRequest.senha" label="senha"></v-text-field>
-    </v-col>
-    <v-col cols="12" md="4">
-      <v-btn @click="criarUser" color="success">Criar usuario</v-btn>
-    </v-col>
+    <div class="d-flex justify-center align-center">
+      <v-col cols="12" md="6">
+        <v-text-field v-model="userRequest.name" label="nome"></v-text-field>
+        <v-text-field v-model="userRequest.description" label="descrição"></v-text-field>
+        <v-text-field v-model="userRequest.whoChose" label="quem escolheu"></v-text-field>
+      </v-col>
+      <v-col cols="12" md="6">
+        <v-btn @click="criarUser" color="success">adicionar filme</v-btn>
+      </v-col>
+    </div>
   </div>
 </template>
 
@@ -21,35 +23,36 @@ export default {
 
   setup() {
     const header = ref([
-      { text: "Nome", value: "nome" },
-      { text: "Sinopse", value: "cpf" },
-      { text: "Quem escolheu?", value: "senha" },
-      { text: "Gênero", value: "genero" },
-      { text: "Assistido?", value: "visto" },
+      { text: "Nome", value: "name" },
+      { text: "Sinopse", value: "description" },
+      { text: "Quem escolheu?", value: "whoChose" },
+      { text: "Gênero", value: "genre" },
+      { text: "Assistido?", value: "watched" },
     ]);
 
     const userRequest = ref({
-      nome: "",
-      cpf: "",
-      senha: "",
+      name: "",
+      description: "",
+      whoChose: "",
     });
 
     const usersData = ref([]);
 
     async function getUsers() {
       usersData.value = await axiosIns
-        .get("gerente/usuarios")
+        .get("movie")
         .then((res) => res.data);
     }
 
     onMounted(getUsers);
 
     async function criarUser() {
-      const resp = await axiosIns
-        .post("usuario", userRequest.value)
-        .then((res) => res.id);
-
-      console.log(resp);
+     await axiosIns
+        .post("movie", userRequest.value)
+        .then((res) => res.id)
+        .finally(
+          await getUsers()
+        );
     }
 
     return {
